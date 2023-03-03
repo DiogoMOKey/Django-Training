@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/style-room-home.css' %}" type="text/css" />
+{% endblock css %}
+
+{% block content %}
+    <br><br>
+    <center>
+        <form id="post-form" method="POST" action="{% url 'checkview' %}">
+        {% csrf_token %}
+            <div class="alert alert-warning" role="alert">
+                Chat Room - Open the same room with 2 different users!
+            </div>
+            <br>
+            <label>Room Name</label>
+            <input type="text" name="room_name" id="room_name" width="100px" />
+            <label>Username</label>
+            <input type="text" name="username" id="username" width="100px" />
+            <input type="submit" value="Enter Room">
+        </form>
+    </center>
+{% endblock content %}

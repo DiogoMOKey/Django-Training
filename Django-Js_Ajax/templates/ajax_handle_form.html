@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock css %}
+
+
+{% block content %}
+
+
+<body>
+
+    <center>
+        <h1>
+            <br><button id="button_1" type="button" class="active btn btn-primary btn-lg" onclick="ChangeButtonActive(1)">Handler</button>
+            Movie Handler Javascript
+            <button id="button_2" type="button" class="btn btn-success btn-lg" onclick="ChangeButtonActive(2)">Create</button><br><br>
+        </h1>
+    </center>
+
+
+    <div id="div-handle" class="row alert-debug">
+        <div id="movie-list" class="col-4 alert-debug">
+            <br><h3  class="text-center">List</h3><br>
+            <ul id="movie-append-list" class="list-group">
+            </ul>
+            <br><br><br>
+        </div>
+
+        <div id="movie-detail" class="col-4 alert-debug">
+            <br><h3  class="text-center" >Detail</h3><br>
+            <ol id="movie-append-detail" class="list-group list-group-numbered">
+
+            </ol>
+            <br>
+        </div>
+
+        <div id="movie-update" class="col-4 alert-debug">
+            <br><h3  class="text-center" >Update</h3><br>
+            <div id="movie-append-update">
+                <div class="input-group mb-3 row">
+                    <div class="col-1"></div>
+                    <div class="col-5 align-middle">
+                        <span class="input-group-text" id="basic-addon1">Title</span>
+                        <input id="update_title" type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col-4">
+                        <span class="input-group-text" id="basic-addon1">Rating</span>
+                        <input id="update_rating" type="text"  class="form-control"  placeholder="Rating" aria-label="Rating">
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <br>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Author</span>
+                    <input id="update_author" type="text" class="form-control" placeholder="Author" aria-label="Author" aria-describedby="basic-addon1">
+                </div>
+                <br>
+
+                <div class="input-group mb-3">
+                    <span for="release_on" class="input-group-text">Release On</span>
+                    <input id="update_release_on" class="form-control" type="date" />
+                </div>
+                <br>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Content</span>
+                    <textarea id="update_content" class="form-control" placeholder="" aria-label="Content"></textarea>
+                </div>
+                <br>
+
+                <div class="d-flex justify-content-center">
+                    <div class="col-2 text-center">
+                        <button id="button_delete" type="button" class="btn btn-danger btn-lg" onclick="DeletePostValues()">Delete</button><br>
+                    </div>
+                    <div class="col-2 text-center">
+                        <button id="button_clean" type="button" class="btn btn-warning btn-lg" onclick="CleanValues()">Clean</button><br>
+                    </div>
+                    <div class="col-2 text-center">
+                        <button id="button_update" type="button" class="btn btn-success btn-lg" onclick="UpdatePostValues()">Save</button><br>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="div-create" style="display: none;"class="row alert-debug">
+        <div class="col-4 alert-debug">
+            <br><br><br>
+        </div>
+
+        <div id="movie-create" class="col-4 alert-debug">
+            <br><h3  class="text-center" >Create</h3><br>
+            <div class="input-group mb-3 row">
+                <div class="col-1"></div>
+                <div class="col-5 align-middle">
+                    <span class="input-group-text" id="basic-addon1">Title</span>
+                    <input id="create_title" type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="basic-addon1">
+                </div>
+                <div class="col-1"></div>
+                <div class="col-4">
+                    <span class="input-group-text" id="basic-addon1">Rating</span>
+                    <input id="create_rating" type="text"  class="form-control"  placeholder="Rating" aria-label="Rating">
+                </div>
+                <div class="col-1"></div>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Author</span>
+                <input id="create_author" type="text" class="form-control" placeholder="Author" aria-label="Author" aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3">
+                <span for="release_on" class="input-group-text">Release On</span>
+                <input id="create_release_on" class="form-control" type="date" />
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">Content</span>
+                <textarea id="create_content" class="form-control" placeholder="" aria-label="Content"></textarea>
+            </div>
+            <br>
+
+            <div class="d-flex justify-content-end">
+                <button id="button_create" type="button" class="btn btn-warning btn-lg" onclick="CreatePostValues()">Save</button><br>
+            </div>
+            <br><br>
+        </div>
+
+        <div class="col-4 alert-debug">            
+            <br><br><br>
+        </div>
+    </div>
+
+<br> 
+</body>
+
+{% endblock content %}
+
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        function GetListValues() {
+            $.ajax({
+                url: '{% url "movie-list" %}',
+                method: 'GET',
+                success: function(data) {
+                    if (data) {
+                        var movieList = $('#movie-append-list');
+                        movieList.empty();
+                        data.forEach(function(movie) {
+                            movieList.append(
+                                '<li class="list-group-item"><h4 data-value="' + movie.id + '">' + movie.title + '</h4></li><br>'
+                            );
+                        });
+                    }
+                },
+
+                error: function(xhr, status, error) {
+                    console.log(error);
+                },
+            });
+        }
+
+
+        function ChangeButtonActive(button_id) {
+            if (button_id == 1) {
+                document.getElementById("button_1").classList.add("active");
+                document.getElementById("button_2").classList.remove("active");
+                document.getElementById("div-handle").style.display = "";
+                document.getElementById("div-create").style.display = "none";
+                GetListValues()
+            }
+            else if (button_id == 2) {
+                document.getElementById("button_1").classList.remove("active");
+                document.getElementById("button_2").classList.add("active");
+                document.getElementById("div-handle").style.display = "none";
+                document.getElementById("div-create").style.display = "";
+            }
+        }
+
+
+        function CleanValues() {
+            $('#movie-append-detail').empty();
+            $('#update_title').val('');
+            $('#update_rating').val('');
+            $('#update_author').val('');
+            $('#update_release_on').val('');
+            $('#update_content').val('');
+            document.getElementById("movie-append-detail").style.display = "none";
+            document.getElementById("movie-append-update").style.display = "none";
+            $("#movie-append-list li.active").removeClass("active");
+        }
+
+
+        function InsertGetValues(object) {
+            var movieDetail = $("#movie-append-detail");
+            movieDetail.empty();
+            if (object){
+                let dataArray = Object.values(object);
+                for (const [key, value] of Object.entries(object)) {
+                    $("#movie-append-detail").append(
+                        '<li class="list-group-item d-flex justify-content-between align-items-start">' +
+                                '<div class="ms-2 me-auto">' +
+                                '<div class="fw-bold">' + key + '</div>' +
+                                value +
+                                '</div>' +
+                        '</li>'
+                    );
+                };
+
+                document.getElementById("movie-append-detail").style.display = "";
+                document.getElementById("movie-append-update").style.display = "";
+
+                $('#update_title').val(object.title);
+                $('#update_rating').val(object.rating);
+                $('#update_author').val(object.author);
+                $('#update_release_on').val(object.release_on);
+                $('#update_content').val(object.content);  
+            }
+        }
+        
+
+        $(document).ready(function () {
+            js_id = 0
+            document.getElementById("movie-append-detail").style.display = "none";
+            document.getElementById("movie-append-update").style.display = "none";
+            GetListValues()
+
+            $("#movie-append-list").on('click', 'li', function(){
+                id = $(this).find('h4').data('value');
+                var listItem = $(this).closest("li");
+                listItem.addClass("active").siblings().removeClass("active");
+                $.ajax({
+                    url: '{% url "movie-list" %}' + id,
+                    method: 'GET',
+                    success: function(movie){
+                        InsertGetValues(movie)
+                        js_id = movie.id
+                    },
+
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                })
+            });   
+        });
+
+
+        function UpdatePostValues() {
+            event.preventDefault();
+            title = $('#update_title').val(),
+            rating = $('#update_rating').val(),
+            author = $('#update_author').val(),
+            release_on = $('#update_release_on').val(),
+            content = $('#update_content').val(),
+
+            $.ajax({
+                type: "PUT",
+                url: '{% url "movie-list" %}' + js_id + '/',
+                data:{
+                    title: title,
+                    rating: rating,
+                    author: author,
+                    release_on: release_on,
+                    content: content,
+                },
+                success: function(response) {
+                    CleanValues();
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
+        function DeletePostValues() {
+            $.ajax({
+                type: 'DELETE',
+                url: '{% url "movie-list" %}' + js_id,
+                success: function(response) {
+                    CleanValues();
+                    $('#movie-append-list').empty();
+                    GetListValues();
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
+        function CreatePostValues() {
+            event.preventDefault();
+            title = $('#create_title').val(),
+            rating = $('#create_rating').val(),
+            author = $('#create_author').val(),
+            release_on = $('#create_release_on').val(),
+            content = $('#create_content').val(),
+
+            $.ajax({
+                url: '{% url "movie-list" %}',
+                type: "POST",
+                data:{
+                    title: title,
+                    rating: rating,
+                    author: author,
+                    release_on: release_on,
+                    content: content,
+                },
+                success: function(response) {
+                    CleanValues();
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
+    </script>
+{% endblock javascript %}

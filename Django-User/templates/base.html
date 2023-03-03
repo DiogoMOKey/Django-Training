@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- templates/base.html -->
+<html lang="en">
+<head> 
+  <title>Django Training</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Diogo Chaves">
+  <link rel="icon" href="{% static 'images/pika-home.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  {% block css %}
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  {% endblock css %}
+</head>
+
+
+<body>
+  <header >
+    <center>
+
+        <a href="{% url 'home' %}">Home</a> | 
+
+    </center>
+  </header>
+</body>
+
+
+{% block content %}
+{% endblock content %}
+
+
+<br><br>
+<center>
+  {% with url="https://www.linkedin.com/in/diogo-chaves-a69711214" %}     
+    <p class="bdr">&copy; 2022 Made By:	
+      <a href="{{url}}">Diogo Chaves</a>
+    </p>
+
+    <p>
+      <i class="fa fa-facebook-official w3-hover-opacity" onclick="location.href='{{url}}'"></i>
+      <i class="fa fa-instagram w3-hover-opacity" onclick="location.href='{{url}}'"></i>
+      <i class="fa fa-snapchat w3-hover-opacity" onclick="location.href='{{url}}'"></i>
+      <i class="fa fa-pinterest-p w3-hover-opacity" onclick="location.href='{{url}}'"></i>
+      <i class="fa fa-twitter w3-hover-opacity" onclick="location.href='{{url}}'"></i>
+      <i class="fa fa-linkedin w3-hover-opacity " onclick="location.href='{{url}}'"></i>
+    {% endwith %}
+  </p>
+</center>
+
+
+<!-- csrf needs to be here -->
+{% csrf_token %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<!-- This is how to include a static file -->
+<script src="{% static 'js/ajax_setup.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script> 
+
+{% block javascript %}
+{% endblock javascript %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+<head> 
+  {% block javascript %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="{% static 'js/ajax.js' %}"></script> <!-- This is how to include a static file -->
+  <script src="{% static 'js/pika.js' %}"></script> <!-- This is how to include a static file -->
+  {% endblock javascript %}
+  {% block css %}
+    <link rel="stylesheet" href="{% static 'css/pika.css' %}" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  {% endblock css %}
+</head> 
+
+
+<body>
+	<main style="background-color: white;">
+
+		<img id="anchor" alt="anchor" src="{% static 'images/pika_js.png' %}" >
+        
+		<div id="eyes">
+			<img class="eye" style="top: 24px;right: 88px;" alt="eye" src="{% static 'images/eyes.png' %}" >
+			<img class="eye" alt="eye" src="{% static 'images/eyes.png' %}" style="top: 9px;right: -30px;">
+			<img class="eye" alt="eye" src="{% static 'images/eyes.png' %}" style="top: -147px;right: -10px;">
+        </div>
+
+	</main>
+</body>
+
+{% endblock content %}

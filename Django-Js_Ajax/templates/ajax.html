@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+<head> 
+    {% block js %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{% static 'js/ajax.js' %}"></script> <!-- This is how to include a static file -->
+    {% endblock js %}
+</head> 
+
+
+<div class="row">
+
+    <center>
+    <br><br>
+    <button type="button" class="btn btn-success btn-lg">GET</button>
+    <br><br>
+    </center>
+
+    
+    <div class="col-md-6">
+        <h1>Left</h1>
+
+        {% block left-column  %}
+            <ul id='seconds'>
+            </ul>
+        {% endblock %}
+    </div>
+
+    <div class="col-md-6">
+        <h1>Right</h1>
+        {% block right-column %}
+            {% csrf_token %}
+            <ul id='right'>
+            </ul>
+        {% endblock %}
+    </div>
+
+</div>
+    
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+<head> 
+    {% block js %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{% static 'js/ajax.js' %}"></script> <!-- This is how to include a static file -->
+    {% endblock js %}
+</head> 
+
+
+<div class="row">
+    <center>
+
+        <br><br>
+        <!-- Button trigger modal -->
+            <button id="launch-modal" type="button" class="btn btn-primary position-relative" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Movies
+                <span id="movies_count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                </span>
+            </button>
+        <br><br>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul id="movie-list"> </ul>
+                        <br><br>
+                        <ul id="movie-detail"> </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="modal-button" type="button" class="btn btn-primary" data-bs-dismiss="modal">Understood</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br><br>
+
+    </center>
+</div>
+    
+
+<!-- Get Movie Count -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: '{% url "count-movies" %}',
+            success: function (data) {
+                $('#movies_count').html(data['movies_count']);
+            }
+        });
+    });
+</script>
+
+<!-- JavaScript to handle the button click and API call on modal -->
+<script>
+    $(function() {
+        $('#launch-modal').click(function() {
+            $.ajax({
+                url: '{% url "movie-list" %}',
+                method: 'GET',
+                success: function(data) {
+                    if (data) {
+                        var movieList = $('#movie-list');
+                        movieList.empty();
+                        data.forEach(function(movie) {
+                            movieList.append(
+                                '<li name="object" value="' + movie.id + '">' + movie.title + '</li>'      
+                            );
+                        });
+                    }
+                },
+
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        $("#movie-list").on('click', 'li', function(){
+            id = $(this).val();
+            $.ajax({
+                url: '{% url "movie-list" %}' + id,
+                method: 'GET',
+                success: function(movie){
+                    var movieDetail = $('#movie-detail');
+                    movieDetail.empty();
+                    if (movie){
+                        let dataArray = Object.values(movie);
+                        dataArray.forEach(function(value) {
+                            $("#movie-detail").append('<li>' + value + '</li>')
+                        });
+                    }
+                },
+            })
+        })
+    });
+</script>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
